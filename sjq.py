@@ -33,7 +33,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('sjq')
     parser.add_argument('-k', '--keys', metavar='key',
                         nargs='*', default=_5tuple, #None,
-                        help='List of JSON field names. Default all fields.')
+                        help='List of JSON field names. Default 5-tuple if -k missing, all fields if -k without field names.')
     parser.add_argument('-c', '--conditions', metavar='expr',
                         nargs='*', default=None,
                         help='JSON field filter as a boolean expression, quote to avoid shell surprises. Default no filtering.')    
