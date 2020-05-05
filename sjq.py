@@ -14,15 +14,15 @@ import sys
 
 _5tuple = 'src dst sport dport protocol'.split()
 
-def runjq (compact=True, files=None, jqfilter='.', sorted=False, 
+def runjq (compact=True, files=None, jqfilter='.', sort=False, 
            input_string=None):
     cmd = ['jq', jqfilter]
     if files:
         cmd.extend(files)
     if compact:
         cmd.append('-c')
-    if sorted:
-        cmd.append('-s')
+    if sort:
+        cmd.append('-S')
     if args.verbose:
         print(cmd)
     subprocess.run(cmd, input=input_string)
@@ -38,6 +38,10 @@ if __name__ == '__main__':
                         nargs='*', default=None,
                         help='JSON field filter as a boolean expression, quote to avoid shell surprises. Default no filtering.')    
     parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('--compact', action='store_true',
+                        help='Output without extra whitespace (jq -c).')
+    parser.add_argument('--sort', action='store_true',
+                        help='Sort output by the keys (jq -S).')
     args = parser.parse_args()
     verbose = args.verbose
     if verbose:
@@ -47,4 +51,4 @@ if __name__ == '__main__':
         jqfilter += ' | {%s}' % ', '.join(args.keys)
     if args.conditions:
         jqfilter += ' | select(.%s)' % ' AND '.join(args.conditions)
-    runjq(jqfilter=jqfilter, files=None)
+    runjq(jqfilter=jqfilter, files=None, compact=args.compact, sort=args.sort)
